@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Disease Predictor</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        input, button { padding: 8px; margin: 5px; width: 300px; }
+    </style>
+</head>
+<body>
+    <h2>🧠 Disease Predictor Chatbot</h2>
+    <div id="chatbox"></div>
+    <input type="text" id="symptomsInput" placeholder="Enter symptoms (comma separated)">
+    <button onclick="predict()">Predict Disease</button>
+
+    <script>
+        function predict() {
+            
+            const input = document.getElementById("symptomsInput").value;
+            const symptoms = input.toLowerCase().split(',').map(s => s.trim());
+
+            fetch("/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ symptoms: symptoms })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("chatbox").innerHTML = `<p>🩺 Prediction: <strong>${data.disease}</strong></p>`;
+            });
+        }
+    </script>
+</body>
+</html>
